@@ -44,4 +44,4 @@ mesh["Wireframe"[
 ]]
 ```
 
-![mesh](Images/ExampleBalls.png)
+![mesh](Images/ExampleBalls.PNG)
