@@ -1,0 +1,295 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     11138,        287]
+NotebookOptionsPosition[      8744,        242]
+NotebookOutlinePosition[      9086,        257]
+CellTagsIndexPosition[      9043,        254]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Load package", "Subsection",ExpressionUUID->"9e86b217-f3c6-4773-a30b-530130954cb2"],
+
+Cell[BoxData[
+ RowBox[{"Get", "[", 
+  RowBox[{"\"\<GmshLink.wl\>\"", ",", 
+   RowBox[{"Path", "\[Rule]", 
+    RowBox[{"NotebookDirectory", "[", "]"}]}]}], "]"}]], "Input",
+ CellLabel->"In[69]:=",ExpressionUUID->"af1fa4ed-6365-4604-adc6-ecb5ad4dadc8"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Set", " ", "your", " ", "path", " ", "to", " ", "Gmsh", " ", "executable",
+     " ", 
+    RowBox[{"here", "."}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"$GmshDirectory", "=", 
+    RowBox[{"FileNameJoin", "[", 
+     RowBox[{"{", 
+      RowBox[{
+      "$UserDocumentsDirectory", ",", "\"\<Software\>\"", ",", "\"\<GMSH\>\"",
+        ",", "\"\<gmsh-4.1.4-Windows64\>\""}], "}"}], "]"}]}], 
+   ";"}]}]], "Input",
+ CellLabel->"In[70]:=",ExpressionUUID->"55cc1a10-36cd-4a4c-9bcf-316cf2b3de4c"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Example", "Subsection",ExpressionUUID->"7a56a90d-0c47-4727-8fc2-650f30b3ab24"],
+
+Cell[CellGroupData[{
+
+Cell["Region", "Subsubsection",ExpressionUUID->"8c33aff5-1ee8-4009-810f-29462c088165"],
+
+Cell[BoxData[
+ RowBox[{"reg", "=", 
+  RowBox[{"RegionDifference", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"RegionUnion", "@", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"Ball", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", "1"}], "]"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Ball", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"1", ",", "0", ",", "0"}], "}"}], ",", 
+         RowBox[{"4", "/", "5"}]}], "]"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"Ball", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"9", "/", "5"}], ",", "0", ",", "0"}], "}"}], ",", 
+         RowBox[{"3", "/", "5"}]}], "]"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"Ball", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"12", "/", "5"}], ",", "0", ",", "0"}], "}"}], ",", 
+         RowBox[{"2", "/", "5"}]}], "]"}]}], "\[IndentingNewLine]", "}"}]}], 
+    ",", "\[IndentingNewLine]", 
+    RowBox[{"Cuboid", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"-", "2"}], ",", 
+        RowBox[{"-", "2"}], ",", "0"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"5", ",", "2", ",", "2"}], "}"}]}], "]"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellLabel->"In[71]:=",ExpressionUUID->"873f4626-5b8b-4da8-8bdd-bb5969984ae4"],
+
+Cell[BoxData[
+ RowBox[{"Region", "[", "reg", "]"}]], "Input",
+ CellLabel->"In[72]:=",ExpressionUUID->"dc37f934-78c4-4283-81fd-77a799d4f69c"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Mathematica", "Subsubsection",ExpressionUUID->"0c830c6b-61b2-4f54-8754-19bc621d45f6"],
+
+Cell[BoxData[
+ RowBox[{"mesh", "=", 
+  RowBox[{"ToElementMesh", "[", "\[IndentingNewLine]", 
+   RowBox[{"reg", ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<MeshOrder\>\"", "\[Rule]", "1"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"MeshQualityGoal", "\[Rule]", "\"\<Maximal\>\""}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellLabel->"In[73]:=",ExpressionUUID->"ce9f3e82-9335-42d3-bb9a-c470da973333"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"quality", "=", 
+   RowBox[{"Join", "@@", 
+    RowBox[{"mesh", "[", "\"\<Quality\>\"", "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Through", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"Min", ",", "Mean"}], "}"}], "@", "quality"}], "]"}]}], "Input",
+ CellLabel->"In[74]:=",ExpressionUUID->"8fd7c7cf-8541-4688-9eee-770ae51fa545"],
+
+Cell[BoxData[
+ RowBox[{"Ratios", "@", 
+  RowBox[{"MinMax", "[", 
+   RowBox[{"Join", "@@", 
+    RowBox[{"mesh", "[", "\"\<MeshElementMeasure\>\"", "]"}]}], 
+   "]"}]}]], "Input",
+ CellLabel->"In[76]:=",ExpressionUUID->"64c250ea-9085-4823-8744-99ce4dc4c345"],
+
+Cell[BoxData[
+ RowBox[{"mesh", "[", 
+  RowBox[{"\"\<Wireframe\>\"", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"\"\<MeshElement\>\"", "\[Rule]", "\"\<MeshElements\>\""}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\"\<MeshElementStyle\>\"", "\[Rule]", 
+     RowBox[{"FaceForm", "@", "LightBlue"}]}], ",", "\[IndentingNewLine]", 
+    RowBox[{"Axes", "\[Rule]", "True"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"ImageSize", "\[Rule]", "300"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"PlotRange", "\[Rule]", "All"}]}], "\[IndentingNewLine]", "]"}], 
+  "]"}]], "Input",
+ CellLabel->"In[77]:=",ExpressionUUID->"385be21a-bec2-4e90-bd1e-4f073f4fc8f8"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Gmsh", "Subsubsection",ExpressionUUID->"a96e88eb-3367-4ecd-982c-8585a2e28f50"],
+
+Cell[BoxData[
+ RowBox[{"mesh", "=", 
+  RowBox[{"ToElementMesh", "[", "\[IndentingNewLine]", 
+   RowBox[{"reg", ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<ElementMeshGenerator\>\"", "\[Rule]", "GmshGenerator"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellLabel->"In[78]:=",ExpressionUUID->"b83f96fc-9491-4e94-b273-b53e9b5c332e"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"quality", "=", 
+   RowBox[{"Join", "@@", 
+    RowBox[{"mesh", "[", "\"\<Quality\>\"", "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Through", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"Min", ",", "Mean"}], "}"}], "@", "quality"}], "]"}]}], "Input",
+ CellLabel->"In[79]:=",ExpressionUUID->"41da77ad-b373-4637-9d33-983738c56895"],
+
+Cell[BoxData[
+ RowBox[{"Ratios", "@", 
+  RowBox[{"MinMax", "[", 
+   RowBox[{"Join", "@@", 
+    RowBox[{"mesh", "[", "\"\<MeshElementMeasure\>\"", "]"}]}], 
+   "]"}]}]], "Input",
+ CellLabel->"In[81]:=",ExpressionUUID->"7d173871-0675-496f-b8c0-264b513b3ff2"],
+
+Cell[BoxData[
+ RowBox[{"mesh", "[", 
+  RowBox[{"\"\<Wireframe\>\"", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"\"\<MeshElement\>\"", "\[Rule]", "\"\<MeshElements\>\""}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\"\<MeshElementStyle\>\"", "\[Rule]", 
+     RowBox[{"FaceForm", "@", "LightBlue"}]}], ",", "\[IndentingNewLine]", 
+    RowBox[{"Axes", "\[Rule]", "True"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"ImageSize", "\[Rule]", "300"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"PlotRange", "\[Rule]", "All"}]}], "\[IndentingNewLine]", "]"}], 
+  "]"}]], "Input",
+ CellLabel->"In[82]:=",ExpressionUUID->"d7dd982d-71bf-48d0-b05c-b17fb338d088"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Options", "Subsubsection",ExpressionUUID->"105ed810-aaa6-4812-8974-47b492c6ab70"],
+
+Cell[BoxData[
+ RowBox[{"Options", "@", "GmshGenerator"}]], "Input",
+ CellLabel->"In[83]:=",ExpressionUUID->"16201586-65a4-41fa-bcea-7bcb926e44c5"],
+
+Cell[BoxData[
+ RowBox[{"mesh", "=", 
+  RowBox[{"ToElementMesh", "[", "\[IndentingNewLine]", 
+   RowBox[{"reg", ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<ElementMeshGenerator\>\"", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{"GmshGenerator", ",", 
+       RowBox[{"\"\<MeshOrder\>\"", "\[Rule]", "2"}]}], "}"}]}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"MaxCellMeasure", "\[Rule]", 
+     RowBox[{"1", "/", "2"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellLabel->"In[84]:=",ExpressionUUID->"b9ecc46d-63bd-4845-8123-a6bfd0e9adba"],
+
+Cell[BoxData[
+ RowBox[{"Show", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"mesh", "[", 
+    RowBox[{"\"\<Wireframe\>\"", "[", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"\"\<MeshElement\>\"", "\[Rule]", "\"\<MeshElements\>\""}], ",",
+       "\[IndentingNewLine]", 
+      RowBox[{"\"\<MeshElementStyle\>\"", "\[Rule]", 
+       RowBox[{"FaceForm", "@", "LightBlue"}]}], ",", "\[IndentingNewLine]", 
+      RowBox[{"Axes", "\[Rule]", "True"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"ImageSize", "\[Rule]", "300"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"PlotRange", "\[Rule]", "All"}]}], "\[IndentingNewLine]", "]"}],
+     "]"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"Graphics3D", "[", 
+    RowBox[{"{", 
+     RowBox[{"Point", "[", 
+      RowBox[{"mesh", "[", "\"\<Coordinates\>\"", "]"}], "]"}], "}"}], 
+    "]"}]}], "\[IndentingNewLine]", "]"}]], "Input",
+ CellLabel->"In[85]:=",ExpressionUUID->"5eb7c855-ecac-4b61-abd7-6baded7688a8"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{958, 1086},
+WindowMargins->{{Automatic, -8}, {Automatic, 0}},
+FrontEndVersion->"11.3 for Microsoft Windows (64-bit) (March 6, 2018)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 89, 0, 67, "Subsection",ExpressionUUID->"9e86b217-f3c6-4773-a30b-530130954cb2"],
+Cell[672, 24, 250, 5, 35, "Input",ExpressionUUID->"af1fa4ed-6365-4604-adc6-ecb5ad4dadc8"],
+Cell[925, 31, 571, 15, 84, "Input",ExpressionUUID->"55cc1a10-36cd-4a4c-9bcf-316cf2b3de4c"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1533, 51, 84, 0, 67, "Subsection",ExpressionUUID->"7a56a90d-0c47-4727-8fc2-650f30b3ab24"],
+Cell[CellGroupData[{
+Cell[1642, 55, 86, 0, 56, "Subsubsection",ExpressionUUID->"8c33aff5-1ee8-4009-810f-29462c088165"],
+Cell[1731, 57, 1444, 39, 228, "Input",ExpressionUUID->"873f4626-5b8b-4da8-8bdd-bb5969984ae4"],
+Cell[3178, 98, 140, 2, 35, "Input",ExpressionUUID->"dc37f934-78c4-4283-81fd-77a799d4f69c"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3355, 105, 91, 0, 56, "Subsubsection",ExpressionUUID->"0c830c6b-61b2-4f54-8754-19bc621d45f6"],
+Cell[3449, 107, 409, 7, 132, "Input",ExpressionUUID->"ce9f3e82-9335-42d3-bb9a-c470da973333"],
+Cell[3861, 116, 376, 10, 60, "Input",ExpressionUUID->"8fd7c7cf-8541-4688-9eee-770ae51fa545"],
+Cell[4240, 128, 256, 6, 35, "Input",ExpressionUUID->"64c250ea-9085-4823-8744-99ce4dc4c345"],
+Cell[4499, 136, 662, 12, 180, "Input",ExpressionUUID->"385be21a-bec2-4e90-bd1e-4f073f4fc8f8"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5198, 153, 84, 0, 56, "Subsubsection",ExpressionUUID->"a96e88eb-3367-4ecd-982c-8585a2e28f50"],
+Cell[5285, 155, 340, 6, 108, "Input",ExpressionUUID->"b83f96fc-9491-4e94-b273-b53e9b5c332e"],
+Cell[5628, 163, 376, 10, 60, "Input",ExpressionUUID->"41da77ad-b373-4637-9d33-983738c56895"],
+Cell[6007, 175, 256, 6, 35, "Input",ExpressionUUID->"7d173871-0675-496f-b8c0-264b513b3ff2"],
+Cell[6266, 183, 662, 12, 180, "Input",ExpressionUUID->"d7dd982d-71bf-48d0-b05c-b17fb338d088"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6965, 200, 87, 0, 56, "Subsubsection",ExpressionUUID->"105ed810-aaa6-4812-8974-47b492c6ab70"],
+Cell[7055, 202, 146, 2, 35, "Input",ExpressionUUID->"16201586-65a4-41fa-bcea-7bcb926e44c5"],
+Cell[7204, 206, 547, 11, 132, "Input",ExpressionUUID->"b9ecc46d-63bd-4845-8123-a6bfd0e9adba"],
+Cell[7754, 219, 962, 19, 252, "Input",ExpressionUUID->"5eb7c855-ecac-4b61-abd7-6baded7688a8"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
