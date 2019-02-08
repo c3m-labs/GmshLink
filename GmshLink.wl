@@ -40,6 +40,12 @@ GmshGenerator;
 (* Begin private context *)
 Begin["`Private`"];
 
+gmshExecutableName[] := 
+	If[ $OperatingSystem === "Windows",
+		"gmsh.exe"
+	,
+		"gmsh"
+	];
 
 (* ::Subsection:: *)
 (*Geometric primitives*)
@@ -183,8 +189,12 @@ exportInputFile[content_,name_String]:=Module[
 
 
 (* Wraps string escape character around strings. *)
-quotes[str_String]:="\""<>str<>"\""
-quotes[other_]:=other
+If[ $OperatingSystem === "Windows",
+	quotes[str_String]:="\""<>str<>"\"";
+	quotes[other_]:=other
+,
+	quotes = Identity
+];
 
 
 (* Needs Gmsh version 4.0 or higher. *)
@@ -193,7 +203,7 @@ GmshGenerator::usage="GmshGenerator[nr] creates ElementMesh via Gmsh software.";
 GmshGenerator::badregion="Only BooleanRegion regions are supported.";
 GmshGenerator::algo="Gmsh algorithm `1` is not supported. Available options are `2`.";
 GmshGenerator::primitive="Only Cuboid, Ball, Cylinder and Cone basic geometric regions are supported.";
-GmshGenerator::exe="Gmsh.exe executable not found in given directory.";
+GmshGenerator::exe="Gmsh executable not found in given directory.";
 GmshGenerator::fail="Meshing procedure failed in Gmsh. Try to import .geo file interactively (with GUI).";
 
 GmshGenerator//Options={
@@ -209,7 +219,8 @@ GmshGenerator//SyntaxInformation={"ArgumentsPattern"->{_,OptionsPattern[]}};
 GmshGenerator[nr_NumericalRegion,opts:OptionsPattern[]]:=Module[
 	{exePath,reg,algorithm,minBound,size,order,header,content,geoFile,mshFile,cmd,mesh},
 
-	exePath=FileNameJoin[{OptionValue["GmshDirectory"],"gmsh.exe"}];
+	exePath=FileNameJoin[{OptionValue["GmshDirectory"], gmshExecutableName[]}];
+
 	If[
 		Not@TrueQ@Quiet@FileExistsQ[exePath],
 		Message[GmshGenerator::exe];Return[$Failed,Module]
@@ -265,7 +276,7 @@ GmshGenerator[nr_NumericalRegion,opts:OptionsPattern[]]:=Module[
 		"-optimize_netgen",
 		"-o",quotes@mshFile
 	}];
-	
+
 	If[
 		Run[cmd]=!=0,
 		Message[GmshGenerator::fail];Return[$Failed,Module]
