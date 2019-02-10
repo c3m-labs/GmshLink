@@ -47,6 +47,8 @@ gmshExecutableName[] :=
 		"gmsh"
 	];
 
+
+
 (* ::Subsection:: *)
 (*Geometric primitives*)
 
@@ -211,13 +213,14 @@ GmshGenerator//Options={
 	"GmshAlgorithm"->Automatic,
 	"GmshDirectory"->$GmshDirectory,
 	"MeshOrder"->1,
+	"OptimizeQuality"->True,
 	MaxCellMeasure->Automatic
 };
 
 GmshGenerator//SyntaxInformation={"ArgumentsPattern"->{_,OptionsPattern[]}};
 
 GmshGenerator[nr_NumericalRegion,opts:OptionsPattern[]]:=Module[
-	{exePath,reg,algorithm,minBound,size,order,header,content,geoFile,mshFile,cmd,mesh},
+	{exePath,reg,algorithm,minBound,size,order,header,content,geoFile,mshFile,cmd,qualityOpt,mesh},
 
 	exePath=FileNameJoin[{OptionValue["GmshDirectory"], gmshExecutableName[]}];
 
@@ -267,13 +270,15 @@ GmshGenerator[nr_NumericalRegion,opts:OptionsPattern[]]:=Module[
 	geoFile=exportInputFile[Join[header,content],"GmshLink"];
 	mshFile=StringReplace[geoFile,".geo"->".msh"];
 	
+	qualityOpt=If[TrueQ@OptionValue["OptimizeQuality"],"-optimize_netgen",Nothing];
+	
 	cmd=quotes@StringJoin@StringRiffle[{
 		quotes@exePath,
 		quotes@geoFile,
 		"-3",
 		"-order",order,
 		"-format msh2",
-		"-optimize_netgen",
+		qualityOpt,
 		"-o",quotes@mshFile
 	}];
 
