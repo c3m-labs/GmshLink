@@ -292,7 +292,13 @@ GmshGenerator[nr_NumericalRegion,opts:OptionsPattern[]]:=Module[
 		TrueQ@OptionValue["DeleteFiles"],
 		DeleteFile[{geoFile,mshFile}]
 	];
-	mesh
+	
+	(* Recreate ElementMesh object to get rid of inproper structure for "PointElements" and 
+	"BoundaryElements", which is produced by GMSH. *)
+	ToElementMesh[
+		"Coordinates"->mesh["Coordinates"],
+		"MeshElements"->mesh["MeshElements"]
+	]
 ]
 
 
