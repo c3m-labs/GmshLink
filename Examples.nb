@@ -1,59 +1,55 @@
-(* Content-type: application/vnd.wolfram.mathematica *)
-
-(*** Wolfram Notebook File ***)
-(* http://www.wolfram.com/nb *)
-
-(* CreatedBy='Mathematica 11.1' *)
-
-(*CacheID: 234*)
-(* Internal cache information:
-NotebookFileLineBreakTest
-NotebookFileLineBreakTest
-NotebookDataPosition[       158,          7]
-NotebookDataLength[     11138,        287]
-NotebookOptionsPosition[      8744,        242]
-NotebookOutlinePosition[      9086,        257]
-CellTagsIndexPosition[      9043,        254]
-WindowFrame->Normal*)
-
-(* Beginning of Notebook Content *)
 Notebook[{
 
 Cell[CellGroupData[{
-Cell["Load package", "Subsection",ExpressionUUID->"9e86b217-f3c6-4773-a30b-530130954cb2"],
+Cell["Load GmshLink package", \
+"Subsection",ExpressionUUID->"9e86b217-f3c6-4773-a30b-530130954cb2"],
+
+Cell["Load pacakge from the same directory as this notebook.", \
+"Text",ExpressionUUID->"18b35fa7-ec7b-4cad-9d2e-6b60509b4a44"],
 
 Cell[BoxData[
  RowBox[{"Get", "[", 
   RowBox[{"\"\<GmshLink.wl\>\"", ",", 
    RowBox[{"Path", "\[Rule]", 
     RowBox[{"NotebookDirectory", "[", "]"}]}]}], "]"}]], "Input",
- CellLabel->"In[69]:=",ExpressionUUID->"af1fa4ed-6365-4604-adc6-ecb5ad4dadc8"],
+ CellLabel->"In[1]:=",ExpressionUUID->"af1fa4ed-6365-4604-adc6-ecb5ad4dadc8"],
+
+Cell["\<\
+Set your path to your directory containing Gmsh executable. Do not include \
+the name of executable itself.\
+\>", "Text",ExpressionUUID->"c78cb9f7-840d-4625-820c-e046b481604f"],
 
 Cell[BoxData[
  RowBox[{
-  RowBox[{"(*", " ", 
-   RowBox[{
-   "Set", " ", "your", " ", "path", " ", "to", " ", "Gmsh", " ", "executable",
-     " ", 
-    RowBox[{"here", "."}]}], " ", "*)"}], "\[IndentingNewLine]", 
-  RowBox[{
-   RowBox[{"$GmshDirectory", "=", 
-    RowBox[{"FileNameJoin", "[", 
-     RowBox[{"{", 
-      RowBox[{
-      "$UserDocumentsDirectory", ",", "\"\<Software\>\"", ",", "\"\<GMSH\>\"",
-        ",", "\"\<gmsh-4.1.4-Windows64\>\""}], "}"}], "]"}]}], 
-   ";"}]}]], "Input",
- CellLabel->"In[70]:=",ExpressionUUID->"55cc1a10-36cd-4a4c-9bcf-316cf2b3de4c"]
+  RowBox[{"$GmshDirectory", "=", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{
+     "$UserDocumentsDirectory", ",", "\"\<Software\>\"", ",", "\"\<GMSH\>\"", 
+      ",", "\"\<gmsh-4.4.1-Windows64\>\""}], "}"}], "]"}]}], 
+  ";"}]], "Input",ExpressionUUID->"55cc1a10-36cd-4a4c-9bcf-316cf2b3de4c"],
+
+Cell["Check if \[OpenCurlyDoubleQuote]ImportMesh\[CloseCurlyDoubleQuote] \
+package is also installed.", \
+"Text",ExpressionUUID->"810750e7-656b-447d-b386-dd7209159fd7"],
+
+Cell[BoxData[
+ RowBox[{"PacletInformation", "[", "\"\<ImportMesh\>\"", "]"}]], "Input",
+ CellLabel->"In[21]:=",ExpressionUUID->"009c7b5a-46d0-44a1-b9c4-ae975cc4e965"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
-Cell["Example", "Subsection",ExpressionUUID->"7a56a90d-0c47-4727-8fc2-650f30b3ab24"],
+Cell["Example", \
+"Subsection",ExpressionUUID->"7a56a90d-0c47-4727-8fc2-650f30b3ab24"],
 
 Cell[CellGroupData[{
 
-Cell["Region", "Subsubsection",ExpressionUUID->"8c33aff5-1ee8-4009-810f-29462c088165"],
+Cell["Define symbolic geometric Region", \
+"Subsubsection",ExpressionUUID->"8c33aff5-1ee8-4009-810f-29462c088165"],
+
+Cell["Define a symbolic region in 3D.", \
+"Text",ExpressionUUID->"3160b6f4-4820-47ed-bd3d-fbc0c80aaec4"],
 
 Cell[BoxData[
  RowBox[{"reg", "=", 
@@ -94,16 +90,25 @@ Cell[BoxData[
       RowBox[{"{", 
        RowBox[{"5", ",", "2", ",", "2"}], "}"}]}], "]"}]}], 
    "\[IndentingNewLine]", "]"}]}]], "Input",
- CellLabel->"In[71]:=",ExpressionUUID->"873f4626-5b8b-4da8-8bdd-bb5969984ae4"],
+ CellLabel->"In[3]:=",ExpressionUUID->"873f4626-5b8b-4da8-8bdd-bb5969984ae4"],
+
+Cell["\<\
+Visualise region. This sometimes work poorly in case of more complicated \
+regions (version 12.0).\
+\>", "Text",ExpressionUUID->"40f7b4cd-4811-4ca5-86b5-209a45f5e78a"],
 
 Cell[BoxData[
  RowBox[{"Region", "[", "reg", "]"}]], "Input",
- CellLabel->"In[72]:=",ExpressionUUID->"dc37f934-78c4-4283-81fd-77a799d4f69c"]
+ CellLabel->"In[4]:=",ExpressionUUID->"dc37f934-78c4-4283-81fd-77a799d4f69c"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
-Cell["Mathematica", "Subsubsection",ExpressionUUID->"0c830c6b-61b2-4f54-8754-19bc621d45f6"],
+Cell["Mathematica meshing method", \
+"Subsubsection",ExpressionUUID->"0c830c6b-61b2-4f54-8754-19bc621d45f6"],
+
+Cell["Create ElementMesh with build-in mesher. ", \
+"Text",ExpressionUUID->"7c7557c5-7b86-44ac-99a9-356d80af4a9e"],
 
 Cell[BoxData[
  RowBox[{"mesh", "=", 
@@ -112,7 +117,10 @@ Cell[BoxData[
     RowBox[{"\"\<MeshOrder\>\"", "\[Rule]", "1"}], ",", "\[IndentingNewLine]", 
     RowBox[{"MeshQualityGoal", "\[Rule]", "\"\<Maximal\>\""}]}], 
    "\[IndentingNewLine]", "]"}]}]], "Input",
- CellLabel->"In[73]:=",ExpressionUUID->"ce9f3e82-9335-42d3-bb9a-c470da973333"],
+ CellLabel->"In[18]:=",ExpressionUUID->"ce9f3e82-9335-42d3-bb9a-c470da973333"],
+
+Cell["Minimal and average quality of elemens is not very good.", \
+"Text",ExpressionUUID->"4823fc17-e3ec-492e-9c8d-9585f91f5be0"],
 
 Cell[BoxData[{
  RowBox[{
@@ -123,8 +131,14 @@ Cell[BoxData[{
  RowBox[{"Through", "[", 
   RowBox[{
    RowBox[{"{", 
-    RowBox[{"Min", ",", "Mean"}], "}"}], "@", "quality"}], "]"}]}], "Input",
- CellLabel->"In[74]:=",ExpressionUUID->"8fd7c7cf-8541-4688-9eee-770ae51fa545"],
+    RowBox[{"Min", ",", "Mean", ",", "Max"}], "}"}], "@", "quality"}], 
+  "]"}]}], "Input",
+ CellLabel->"In[19]:=",ExpressionUUID->"8fd7c7cf-8541-4688-9eee-770ae51fa545"],
+
+Cell["\<\
+The ratio between the largest and the smallest element is huge and that is \
+not good.\
+\>", "Text",ExpressionUUID->"de2e48d9-41ee-4790-884b-defce60aabf9"],
 
 Cell[BoxData[
  RowBox[{"Ratios", "@", 
@@ -132,7 +146,12 @@ Cell[BoxData[
    RowBox[{"Join", "@@", 
     RowBox[{"mesh", "[", "\"\<MeshElementMeasure\>\"", "]"}]}], 
    "]"}]}]], "Input",
- CellLabel->"In[76]:=",ExpressionUUID->"64c250ea-9085-4823-8744-99ce4dc4c345"],
+ CellLabel->"In[8]:=",ExpressionUUID->"64c250ea-9085-4823-8744-99ce4dc4c345"],
+
+Cell["\<\
+Visualize resulting mesh. See uneven distribution of elements in some \
+particular regions.\
+\>", "Text",ExpressionUUID->"18fa2507-688d-4d5f-a1af-88eb1ed57c49"],
 
 Cell[BoxData[
  RowBox[{"mesh", "[", 
@@ -146,20 +165,30 @@ Cell[BoxData[
     RowBox[{"ImageSize", "\[Rule]", "300"}], ",", "\[IndentingNewLine]", 
     RowBox[{"PlotRange", "\[Rule]", "All"}]}], "\[IndentingNewLine]", "]"}], 
   "]"}]], "Input",
- CellLabel->"In[77]:=",ExpressionUUID->"385be21a-bec2-4e90-bd1e-4f073f4fc8f8"]
+ CellLabel->"In[9]:=",ExpressionUUID->"385be21a-bec2-4e90-bd1e-4f073f4fc8f8"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
-Cell["Gmsh", "Subsubsection",ExpressionUUID->"a96e88eb-3367-4ecd-982c-8585a2e28f50"],
+Cell["Gmsh meshing method", \
+"Subsubsection",ExpressionUUID->"a96e88eb-3367-4ecd-982c-8585a2e28f50"],
+
+Cell["\<\
+This is basic method to define GMSH should be used as mesh generator.\
+\>", "Text",ExpressionUUID->"c01cb354-fa3c-4ef6-b4d3-b659aa2d2ae6"],
 
 Cell[BoxData[
  RowBox[{"mesh", "=", 
   RowBox[{"ToElementMesh", "[", "\[IndentingNewLine]", 
    RowBox[{"reg", ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<BoundaryMeshGenerator\>\"", "\[Rule]", "None"}], ",", 
+    "\[IndentingNewLine]", 
     RowBox[{"\"\<ElementMeshGenerator\>\"", "\[Rule]", "GmshGenerator"}]}], 
    "\[IndentingNewLine]", "]"}]}]], "Input",
- CellLabel->"In[78]:=",ExpressionUUID->"b83f96fc-9491-4e94-b273-b53e9b5c332e"],
+ CellLabel->"In[10]:=",ExpressionUUID->"b83f96fc-9491-4e94-b273-b53e9b5c332e"],
+
+Cell["Minimal element quality is much better.", \
+"Text",ExpressionUUID->"f2612389-a9ab-49d6-b436-e95e78c2e167"],
 
 Cell[BoxData[{
  RowBox[{
@@ -171,7 +200,11 @@ Cell[BoxData[{
   RowBox[{
    RowBox[{"{", 
     RowBox[{"Min", ",", "Mean"}], "}"}], "@", "quality"}], "]"}]}], "Input",
- CellLabel->"In[79]:=",ExpressionUUID->"41da77ad-b373-4637-9d33-983738c56895"],
+ CellLabel->"In[11]:=",ExpressionUUID->"41da77ad-b373-4637-9d33-983738c56895"],
+
+Cell["\<\
+Also the ratio between the largest and the smallest element is much better.\
+\>", "Text",ExpressionUUID->"5ad58e15-9176-4bbe-8004-a4e5b4f63c0a"],
 
 Cell[BoxData[
  RowBox[{"Ratios", "@", 
@@ -179,7 +212,12 @@ Cell[BoxData[
    RowBox[{"Join", "@@", 
     RowBox[{"mesh", "[", "\"\<MeshElementMeasure\>\"", "]"}]}], 
    "]"}]}]], "Input",
- CellLabel->"In[81]:=",ExpressionUUID->"7d173871-0675-496f-b8c0-264b513b3ff2"],
+ CellLabel->"In[13]:=",ExpressionUUID->"7d173871-0675-496f-b8c0-264b513b3ff2"],
+
+Cell["\<\
+See the mesh with more uniform element size distribution and accurate \
+representation of boundaries.\
+\>", "Text",ExpressionUUID->"e6b6152d-cbad-401c-8f72-3df98f50cd21"],
 
 Cell[BoxData[
  RowBox[{"mesh", "[", 
@@ -193,29 +231,46 @@ Cell[BoxData[
     RowBox[{"ImageSize", "\[Rule]", "300"}], ",", "\[IndentingNewLine]", 
     RowBox[{"PlotRange", "\[Rule]", "All"}]}], "\[IndentingNewLine]", "]"}], 
   "]"}]], "Input",
- CellLabel->"In[82]:=",ExpressionUUID->"d7dd982d-71bf-48d0-b05c-b17fb338d088"]
+ CellLabel->"In[14]:=",ExpressionUUID->"d7dd982d-71bf-48d0-b05c-b17fb338d088"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
-Cell["Options", "Subsubsection",ExpressionUUID->"105ed810-aaa6-4812-8974-47b492c6ab70"],
+Cell["Options of GmshGenerator", \
+"Subsubsection",ExpressionUUID->"105ed810-aaa6-4812-8974-47b492c6ab70"],
+
+Cell["See al available options of GmshGenerator function.", \
+"Text",ExpressionUUID->"26db999c-974e-440d-9e61-d3702791f747"],
 
 Cell[BoxData[
  RowBox[{"Options", "@", "GmshGenerator"}]], "Input",
- CellLabel->"In[83]:=",ExpressionUUID->"16201586-65a4-41fa-bcea-7bcb926e44c5"],
+ CellLabel->"In[15]:=",ExpressionUUID->"16201586-65a4-41fa-bcea-7bcb926e44c5"],
+
+Cell["\<\
+Use some options to set mesh order to 2, larger element size (MaxCellMeasure) \
+and not particularly optimized element shape.\
+\>", "Text",ExpressionUUID->"5b608483-b6c5-41f3-8f56-6b93752ecdb7"],
 
 Cell[BoxData[
  RowBox[{"mesh", "=", 
   RowBox[{"ToElementMesh", "[", "\[IndentingNewLine]", 
    RowBox[{"reg", ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<BoundaryMeshGenerator\>\"", "\[Rule]", "None"}], ",", 
+    "\[IndentingNewLine]", 
     RowBox[{"\"\<ElementMeshGenerator\>\"", "\[Rule]", 
      RowBox[{"{", 
       RowBox[{"GmshGenerator", ",", 
-       RowBox[{"\"\<MeshOrder\>\"", "\[Rule]", "2"}]}], "}"}]}], ",", 
-    "\[IndentingNewLine]", 
+       RowBox[{"\"\<MeshOrder\>\"", "\[Rule]", "2"}], ",", 
+       RowBox[{"\"\<OptimizeQuality\>\"", "\[Rule]", "False"}]}], "}"}]}], 
+    ",", "\[IndentingNewLine]", 
     RowBox[{"MaxCellMeasure", "\[Rule]", 
      RowBox[{"1", "/", "2"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
- CellLabel->"In[84]:=",ExpressionUUID->"b9ecc46d-63bd-4845-8123-a6bfd0e9adba"],
+ CellLabel->"In[16]:=",ExpressionUUID->"b9ecc46d-63bd-4845-8123-a6bfd0e9adba"],
+
+Cell["\<\
+Visualize this coarse mesh. Note that mesh order is 2 and additional nodes \
+are present on tetrahedron edges.\
+\>", "Text",ExpressionUUID->"afab4048-ea8e-4d61-81c3-7d5cdf4170f2"],
 
 Cell[BoxData[
  RowBox[{"Show", "[", "\[IndentingNewLine]", 
@@ -236,60 +291,13 @@ Cell[BoxData[
      RowBox[{"Point", "[", 
       RowBox[{"mesh", "[", "\"\<Coordinates\>\"", "]"}], "]"}], "}"}], 
     "]"}]}], "\[IndentingNewLine]", "]"}]], "Input",
- CellLabel->"In[85]:=",ExpressionUUID->"5eb7c855-ecac-4b61-abd7-6baded7688a8"]
+ CellLabel->"In[17]:=",ExpressionUUID->"5eb7c855-ecac-4b61-abd7-6baded7688a8"]
 }, Open  ]]
 }, Open  ]]
 },
 WindowSize->{958, 1086},
 WindowMargins->{{Automatic, -8}, {Automatic, 0}},
-FrontEndVersion->"11.3 for Microsoft Windows (64-bit) (March 6, 2018)",
+PrivateNotebookOptions->{"FileOutlineCache"->False},
+FrontEndVersion->"12.0 for Microsoft Windows (64-bit) (April 8, 2019)",
 StyleDefinitions->"Default.nb"
 ]
-(* End of Notebook Content *)
-
-(* Internal cache information *)
-(*CellTagsOutline
-CellTagsIndex->{}
-*)
-(*CellTagsIndex
-CellTagsIndex->{}
-*)
-(*NotebookFileOutline
-Notebook[{
-Cell[CellGroupData[{
-Cell[580, 22, 89, 0, 67, "Subsection",ExpressionUUID->"9e86b217-f3c6-4773-a30b-530130954cb2"],
-Cell[672, 24, 250, 5, 35, "Input",ExpressionUUID->"af1fa4ed-6365-4604-adc6-ecb5ad4dadc8"],
-Cell[925, 31, 571, 15, 84, "Input",ExpressionUUID->"55cc1a10-36cd-4a4c-9bcf-316cf2b3de4c"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[1533, 51, 84, 0, 67, "Subsection",ExpressionUUID->"7a56a90d-0c47-4727-8fc2-650f30b3ab24"],
-Cell[CellGroupData[{
-Cell[1642, 55, 86, 0, 56, "Subsubsection",ExpressionUUID->"8c33aff5-1ee8-4009-810f-29462c088165"],
-Cell[1731, 57, 1444, 39, 228, "Input",ExpressionUUID->"873f4626-5b8b-4da8-8bdd-bb5969984ae4"],
-Cell[3178, 98, 140, 2, 35, "Input",ExpressionUUID->"dc37f934-78c4-4283-81fd-77a799d4f69c"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[3355, 105, 91, 0, 56, "Subsubsection",ExpressionUUID->"0c830c6b-61b2-4f54-8754-19bc621d45f6"],
-Cell[3449, 107, 409, 7, 132, "Input",ExpressionUUID->"ce9f3e82-9335-42d3-bb9a-c470da973333"],
-Cell[3861, 116, 376, 10, 60, "Input",ExpressionUUID->"8fd7c7cf-8541-4688-9eee-770ae51fa545"],
-Cell[4240, 128, 256, 6, 35, "Input",ExpressionUUID->"64c250ea-9085-4823-8744-99ce4dc4c345"],
-Cell[4499, 136, 662, 12, 180, "Input",ExpressionUUID->"385be21a-bec2-4e90-bd1e-4f073f4fc8f8"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[5198, 153, 84, 0, 56, "Subsubsection",ExpressionUUID->"a96e88eb-3367-4ecd-982c-8585a2e28f50"],
-Cell[5285, 155, 340, 6, 108, "Input",ExpressionUUID->"b83f96fc-9491-4e94-b273-b53e9b5c332e"],
-Cell[5628, 163, 376, 10, 60, "Input",ExpressionUUID->"41da77ad-b373-4637-9d33-983738c56895"],
-Cell[6007, 175, 256, 6, 35, "Input",ExpressionUUID->"7d173871-0675-496f-b8c0-264b513b3ff2"],
-Cell[6266, 183, 662, 12, 180, "Input",ExpressionUUID->"d7dd982d-71bf-48d0-b05c-b17fb338d088"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[6965, 200, 87, 0, 56, "Subsubsection",ExpressionUUID->"105ed810-aaa6-4812-8974-47b492c6ab70"],
-Cell[7055, 202, 146, 2, 35, "Input",ExpressionUUID->"16201586-65a4-41fa-bcea-7bcb926e44c5"],
-Cell[7204, 206, 547, 11, 132, "Input",ExpressionUUID->"b9ecc46d-63bd-4845-8123-a6bfd0e9adba"],
-Cell[7754, 219, 962, 19, 252, "Input",ExpressionUUID->"5eb7c855-ecac-4b61-abd7-6baded7688a8"]
-}, Open  ]]
-}, Open  ]]
-}
-]
-*)
-
