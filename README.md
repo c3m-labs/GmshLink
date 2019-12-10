@@ -1,6 +1,7 @@
 # GmshLink
 
-[Mathematica](http://www.wolfram.com/mathematica/) package to create `ElementMesh` objects via [Gmsh](http://gmsh.info/) meshing software.
+_GmshLink_ is a [Mathematica](http://www.wolfram.com/mathematica/) package to create `ElementMesh`
+objects via [Gmsh](http://gmsh.info/) meshing software.
 
 It creates tetrahedral mesh with much better quality than built-in meshing algorithm.
 Currently it works only for 3D symbolic regions obtained by boolean operations on
@@ -11,18 +12,21 @@ basic geometric primitives (`Cuboid`, `Ball`, `Cylinder` and `Cone`).
 ### Prerequisites
 
 * The latest release (4.0+) of open source meshing software [Gmsh](http://gmsh.info/).
-* [ImportMesh](http://github.com/c3m-labs/ImportMesh) (0.3.2) package to import .msh files to Mathematica.
+* [ImportMesh](http://github.com/c3m-labs/ImportMesh) (0.3.3) package to import .msh files to Mathematica.
 
-Gmsh doesn't require installation, just unzip it to any local directory. 
+Gmsh doesn't require installation, just unzip it to any local directory.
 Then copy the `GmshLink.wl` file to your local path `FileNameJoin[{$UserBaseDirectory, "Applications"}]` and
 you can already try the following example in Mathematica notebook.
 
+See [`Examples.nb`](Examples.nb) notebook for more examples on how to use additional options of `GmshGenerator` function.
+
 ```mathematica
+
  (* Load the package. *)
 Get["GmshLink`"]
 
-(* Set your path to Gmsh executable. *)
-$GmshDirectory ="local/path/to/Gmsh.exe";
+(* Set path directory containing Gmsh executable. *)
+$GmshDirectory ="local/path/to/gmsh-4.4.1-Windows64";
 
 (* Define symbolic region based on boolean operations with geometric primitives. *)
 reg = RegionDifference[
@@ -38,6 +42,7 @@ reg = RegionDifference[
 (* Create ElementMesh object from symbolic region. *)
 mesh = ToElementMesh[reg,"ElementMeshGenerator" -> GmshGenerator]
 
+(* Visualize the mesh with nice element distribution and accurate boundary representation. *)
 mesh["Wireframe"[
     "MeshElement" -> "MeshElements",
     "MeshElementStyle" -> FaceForm@LightBlue
@@ -45,3 +50,7 @@ mesh["Wireframe"[
 ```
 
 ![mesh](Images/ExampleBalls.PNG)
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
